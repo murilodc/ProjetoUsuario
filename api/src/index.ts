@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import authRoutes from "./routes/auth.js";
+import authRoutes from "./routes/user.js";
+import { setupSwagger } from "./swagger.js";
 
 dotenv.config();
 
@@ -8,12 +9,16 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 app.use(express.json());
-app.use("/auth", authRoutes);
+
+setupSwagger(app);
+
+app.use("/user", authRoutes);
 
 app.get("/ping", (req, res) => {
     res.json({ message: "pong" });
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server rodando na porta ${port}`);
+    console.log(`Swagger rodando em http://localhost:${port}/api`);
 });

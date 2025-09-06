@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { AuthRequest, JwtPayload } from '../types/express.js';
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         return res.status(401).json({ message: "Nenhum token informado" });
@@ -13,8 +14,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     }
 
     try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET as string);
-        (req as any).user = payload;
+        const payload = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
+        req.user = payload;
         next();
     } catch (err){
         return res.status(401).json({ message: "Token inválido" });

@@ -1,17 +1,21 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { isValidEmail } from '../utils/validators.js';
 const prisma = new PrismaClient();
 const SALT_ROUNDS = 10;
 export const signup = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            return res.status(400).json({ message: "Email and password are required" });
+            return res.status(400).json({ message: "Email e senha não informados" });
+        }
+        if (!isValidEmail(email)) {
+            return res.status(400).json({ message: "Email inválido" });
         }
         const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(400).json({ message: "Usuário já existente" });
         }
         const senhaCriptografada = await bcrypt.hash(password, SALT_ROUNDS);
         const user = await prisma.user.create({
