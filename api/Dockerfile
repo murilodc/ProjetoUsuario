@@ -9,7 +9,8 @@ RUN npm install
 COPY . .
 
 RUN npx prisma generate
+RUN npm run build
 
 EXPOSE 4000
 
-CMD ["npx", "ts-node-dev", "src/index.ts"]
+CMD ["node", "dist/index.js"]

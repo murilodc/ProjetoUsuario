@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AuthRequest } from '../types/express.js';
 import { isValidEmail } from '../utils/validators.js';
+import handleError from '../utils/util.js';
 
 const prisma = new PrismaClient();
 const SALT_ROUNDS = 10;
@@ -36,8 +37,7 @@ export const signup = async (req: Request, res: Response) => {
 
         return res.status(201).json({ id: user.id, email: user.email });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
+        handleError(res,error);
     }
 }
 
@@ -59,22 +59,25 @@ export const login = async (req: Request, res: Response) => {
 
         return res.status(200).json({ token });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
+        handleError(res,error);
     }
 }
 
 export const me = async (req: AuthRequest, res: Response) => {
-    if(!req.user) {
-        return res.status(401).json({ message: "Usuário não autenticado" });
+    try{
+        if(!req.user) {
+            return res.status(401).json({ message: "Usuário não autenticado" });
+        }
+
+        const userId = Number(req.user.id);
+
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if(!user) {
+            return res.status(404).json({ message: "Usuário não encontrado" });
+        }
+
+        res.json({ id: user.id, email: user.email, createdAt: user.createdAt });
+    } catch (error) {
+        handleError(res,error);
     }
-
-    const userId = Number(req.user.id);
-
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if(!user) {
-        return res.status(404).json({ message: "Usuário não encontrado" });
-    }
-
-    res.json({ id: user.id, email: user.email, createdAt: user.createdAt });
 }

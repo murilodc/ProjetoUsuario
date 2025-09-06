@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, login, me } from "../controllers/userController.js";
+import { signup, login, me } from "../controllers/authController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -76,7 +76,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /user/signup:
+ * /auth/signup:
  *   post:
  *     summary: Criar um novo usuário
  *     tags: [Auth]
@@ -101,7 +101,7 @@ router.post("/signup", signup);
 
 /**
  * @swagger
- * /user/login:
+ * /auth/login:
  *   post:
  *     summary: Fazer login
  *     tags: [Auth]
@@ -125,7 +125,7 @@ router.post("/login", login);
 
 /**
  * @swagger
- * /user/me:
+ * /auth/me:
  *   get:
  *     summary: Retorna informações do usuário logado
  *     tags: [Auth]
