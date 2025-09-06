@@ -4,42 +4,98 @@ import { authMiddleware } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   schemas:
+ *     UserSignup:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           example: usuario@email.com
+ *         password:
+ *           type: string
+ *           example: senha123
+ *     UserLogin:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           example: usuario@email.com
+ *         password:
+ *           type: string
+ *           example: senha123
+ *     UserResponse:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "1"
+ *         email:
+ *           type: string
+ *           example: usuario@email.com
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2025-09-06T14:00:00.000Z"
+ *     UserSignupResponse:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "1"
+ *         email:
+ *           type: string
+ *           example: usuario@email.com
+ *     TokenResponse:
+ *       type: object
+ *       properties:
+ *         token:
+ *           type: string
+ *           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ */
+/**
+ * @swagger
  * tags:
  *   name: Auth
  *   description: Endpoints de autenticação
  */
 /**
  * @swagger
- * /signup:
+ * /auth/signup:
  *   post:
- *    summary: Criar um novo usuário
- *    tags: [Auth]
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            required:
- *              - email
- *              - password
- *            properties:
- *              email:
- *               type: string
- *               example: usuario@email.com
- *              password:
- *               type: string
- *               example: senha123
- *   responses:
- *      201:
- *       description: Usuário criado com sucesso
- *      400:
- *          description: Requisição inválida ou usuário já existente
+ *     summary: Criar um novo usuário
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserSignup'
+ *     responses:
+ *       201:
+ *         description: Usuário criado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserSignupResponse'
+ *       400:
+ *         description: Requisição inválida ou usuário já existente
  */
 router.post("/signup", signup);
 /**
  * @swagger
- * /login:
+ * /auth/login:
  *   post:
  *     summary: Fazer login
  *     tags: [Auth]
@@ -48,27 +104,21 @@ router.post("/signup", signup);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: usuario@email.com
- *               password:
- *                 type: string
- *                 example: senha123
+ *             $ref: '#/components/schemas/UserLogin'
  *     responses:
  *       200:
  *         description: Login realizado com sucesso
- *       401:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TokenResponse'
+ *       400:
  *         description: Credenciais inválidas
  */
 router.post("/login", login);
 /**
  * @swagger
- * /me:
+ * /auth/me:
  *   get:
  *     summary: Retorna informações do usuário logado
  *     tags: [Auth]
@@ -77,6 +127,10 @@ router.post("/login", login);
  *     responses:
  *       200:
  *         description: Usuário autenticado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponse'
  *       401:
  *         description: Não autorizado
  */

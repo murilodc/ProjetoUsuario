@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import authRoutes from "./routes/user.js";
+import authRoutes from "./routes/auth.js";
 import { setupSwagger } from "./swagger.js";
 import cors from "cors";
 dotenv.config();
@@ -9,7 +9,7 @@ const port = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 setupSwagger(app);
-app.use("/user", authRoutes);
+app.use("/auth", authRoutes);
 app.get("/ping", (req, res) => {
     res.json({ message: "pong" });
 });
