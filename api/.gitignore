@@ -1,5 +1,31 @@
-node_modules
-# Keep environment variables out of version control
-.env
+# Node modules
+node_modules/
 
+# Build outputs
+dist/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Prisma
 /generated/prisma
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# MacOS
+.DS_Store
+
+# Docker (opcional, se você gerar logs ou arquivos temporários)
+*.log
+docker-compose.override.yml
+
+# IDE / Editor
+.vscode/
+.idea/
