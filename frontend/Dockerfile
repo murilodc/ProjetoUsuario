@@ -8,6 +8,12 @@ RUN npm install
 
 COPY . .
 
+RUN npm list tailwindcss autoprefixer
+
+RUN npx shadcn-ui@latest init -y --skip-git
+
+RUN npx shadcn-ui@latest add button input card
+
 RUN npm run build
 
 FROM nginx:alpine
