@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "Esperando o MySQL subir"
+echo "Esperando o MySQL subir..."
 until nc -z db 3306; do
   sleep 2
 done
