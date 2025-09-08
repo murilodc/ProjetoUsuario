@@ -30,6 +30,10 @@ Aplicação simples de autenticação com:
 
 Copie o arquivo `.env.example` para `.env` em cada serviço (backend e frontend) e configure as variáveis conforme necessário.
 
+```
+Copy-Item.env.example .env
+```
+
 ### Backend (`backend/.env`)
 
 ```
@@ -65,7 +69,7 @@ Isso irá:
 ## 5. Acessando a Aplicação
 
 - Front-end: http://localhost:3000  
-- Swagger (documentação da API): http://localhost:4000/api-docs
+- Swagger (documentação da API): http://localhost:4000/api
 
 ---
 
